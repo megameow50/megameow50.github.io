@@ -1,5 +1,8 @@
 PlayState = {};
-    const LEVEL_COUNT = 3;
+const LEVEL_COUNT = 3;
+
+PlayState.background = null;
+
 PlayState.init = function (data) {
     this.game.renderer.renderSession.roundPixels = true;
     this.keys = this.game.input.keyboard.addKeys({
@@ -16,21 +19,27 @@ PlayState.init = function (data) {
     this.coinPickupCount = 0;
     this.hasKey = false;
     this.level = (data.level || 0) % LEVEL_COUNT;
-    this.level =2; 
+    //this.level =2; 
 };
 
 // load game assets here
 PlayState.preload = function () {
+    this.game.load.spritesheet('derp', 'images/derpsheet.png',24, 50);
     this.game.load.json('level:0', 'data/level00.json');
     this.game.load.json('level:1', 'data/level01.json');
     this.game.load.json('level:2', 'data/level02.json');
     this.game.load.image('background', 'images/background.png');
+    this.game.load.image('stone_background', 'images/stone_background.png');
     this.game.load.image('ground', 'images/ground.png');
     this.game.load.image('grass:8x1', 'images/grass_8x1.png');
     this.game.load.image('grass:6x1', 'images/grass_6x1.png');
     this.game.load.image('grass:4x1', 'images/grass_4x1.png');
     this.game.load.image('grass:2x1', 'images/grass_2x1.png');
     this.game.load.image('grass:1x1', 'images/grass_1x1.png');
+    this.game.load.image('stone:1x1', 'images/stone_1x1.png');
+    this.game.load.image('stone:4x1', 'images/stone_4x1.png');
+    this.game.load.image('stone:8x1', 'images/stone_8x1.png');
+    this.game.load.image('stone_ground', 'images/stone_ground.png');
     //load hero
     this.game.load.spritesheet('hero', 'images/hero.png', 36, 42);
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
@@ -49,7 +58,16 @@ PlayState.preload = function () {
 };
 // create game entities and set up world here
 PlayState.create = function () {
-    this.game.add.image(0, 0, 'background');
+
+    if (PlayState.background != null){
+        PlayState.background.destroy();
+    }
+    if (this.level == 2) {
+        PlayState.background = this.game.add.image(0, 0, 'stone_background');
+    } else {
+        PlayState.background = this.game.add.image(0, 0, 'background')
+    }
+    //this.game.add.image(0, 0, 'background');
     this._loadLevel(this.game.cache.getJSON(`level:${this.level}`));
     console.log("we just ran the create function!")
      this.sfx = {
@@ -59,7 +77,8 @@ PlayState.create = function () {
         key: this.game.add.audio('sfx:key'),
         door: this.game.add.audio('sfx:door')    
     };
-     this._createHud();
+    this._createHud();
+     
 };
 
 PlayState._loadLevel = function (data) {
@@ -96,11 +115,12 @@ PlayState._spawnCharacters = function (data) {
     // spawn hero
     this.hero = new Hero(this.game, data.hero.x, data.hero.y);
     this.game.add.existing(this.hero);
-    // spawn spiders
+    //spawn spiders
     data.spiders.forEach(function (spider) {
         let sprite = new Spider(this.game, spider.x, spider.y);
         this.spiders.add(sprite);
     }, this);
+
 };
 
 PlayState._spawnCoin = function (coin) {
@@ -234,14 +254,22 @@ window.onload = function () {
 
 function Hero(game, x, y) {
     // call Phaser.Sprite constructor
-    Phaser.Sprite.call(this, game, x, y, 'hero');
+    Phaser.Sprite.call(this, game, x, y, 'derp');
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true;
+    
+    this.animations.add('stop', [0]);
+    this.animations.add('run', [1,2,3,4,5,6], 12, true);
+    this.animations.add('jump', [8]);
+    this.animations.add('fall', [9]);
+    
+    /*
     this.animations.add('stop', [0]);
     this.animations.add('run', [1, 2], 8, true); // 8fps looped
     this.animations.add('jump', [3]);
     this.animations.add('fall', [4]);
+    */
 }
 
 // inherit from Phaser.Sprite

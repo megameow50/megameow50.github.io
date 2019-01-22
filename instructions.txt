@@ -1,6 +1,5 @@
 GAME DEVELOPMENT INSTRUCTIONS
 
-
 [1] START THE SERVER
 
 To start the server, open a command prompt
@@ -15,6 +14,18 @@ go to localhost:8080 to get the file /index.html
 Go to the "..." menue on the right hand side of CHROME
 Select MORE TOOLS>
 Select DEVELOPER TOOLS
+
+
+USING THE LIVE VERSION
+
+We neede a way to get the game onto the internet. We created a GitHub account, Github lets you put live HTML pages online.
+
+Github account: megameow50
+
+Go to: 
+
+megameow50.github.io/version2 <- the modified version of the turorial
+megameow50.github.io/version1 <- the original version of the turorial 
 
 --------------------------------------
 
