@@ -11,11 +11,23 @@ function prettyPrint(trackList){
 
 
 function removeFromList(element, list){
-	const index = list.indexOf(element);
-	if (index > -1) {
-  		list.splice(element, 1);
+	let index = list.indexOf(element);
+	while (index > -1) {
+  		let result = list.splice(index, 1);
+        index = list.indexOf(element);
   	}
 }
+function cupName(){
+    let names = ['Sheikah Cup', 'Red Shell Cup', 'Bobomb Cup', 'Clown Car Cup', 'Rainbow Cup', 'Thwomp Cup', 'Whomp Cup', 'Toad Cup',
+    'Dry Bones Cup', 'Cucco Cup', 'Hylian Cup', 'Shield Cup', 'Sword Cup', 'Monita Cup', '? Block Cup', 'Coin Cup', 'Hammer Cup',
+    'BOWSER Cup', 'Mario Cup', 'Luigi Cup', 'Waluigi Cup', 'Wario Cup', 'Koopaling Cup', 'Bowser Jr Cup', 'Propellar Cup', 'Chomp Cup',
+    'Bullet Cup', 'Moon Cup', 'Blue Shell Cup'];
+
+
+    return names[Math.floor(Math.random() * names.length)]
+
+}
+
 
 function trackGenerator(){
 	let firstChoices = ['Mario Circuit', 'GBA Mario Circuit', 'Mario Kart Stadium', 'Water Park', 'Thwomp Ruins',
@@ -53,6 +65,7 @@ function trackGenerator(){
     for (let i = 0; i < 3; i++ ){
     	track = secondChoices[Math.floor(Math.random() * secondChoices.length)];
     	myTracks.push(track);
+    	removeFromList(track, secondChoices);
 		removeFromList(track, thirdChoices);
     	removeFromList(track, finalChoices);
     }
